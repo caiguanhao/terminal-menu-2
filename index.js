@@ -20,7 +20,7 @@ function Menu (opts) {
         fg: opts.fg || 'white',
         bg: opts.bg || 'blue'
     };
-    
+
     self.padding = opts.padding || {
         left: 2,
         right: 2,
@@ -40,22 +40,22 @@ function Menu (opts) {
     self.size = {
         x: self.width + self.padding.left + self.padding.right
     };
-    
+
     self.charm = opts.charm || createCharm();
     self.stream = self.charm.pipe(resumer());
     self.charm.display('reset');
     self.charm.display('bright');
-    
+
     self._ondata = function (buf) {
         self._ondataHandler(buf);
     };
-    
+
     process.nextTick(function () {
         self._ticked = true;
         self.charm.cursor(false);
         self._draw();
     });
-    
+
     process.stdin.on('data', self._ondata);
     process.stdin.setRawMode(true);
     process.stdin.resume();
@@ -74,7 +74,7 @@ Menu.prototype.add = function (label, cb) {
             if (ix === index) cb(x, ix);
         });
     }
-    
+
     this.items.push({
         x: this.x,
         y: this.y,
@@ -126,9 +126,9 @@ Menu.prototype.write = function (msg) {
     this.charm.background(this.colors.bg);
     this.charm.foreground(this.colors.fg);
     this._fillLine(this.y);
-    
+
     var parts = msg.split('\n');
-    
+
     for (var i = 0; i < parts.length; i++) {
         if (parts[i].length) {
             this.charm.position(this.x, this.y);
@@ -147,11 +147,11 @@ Menu.prototype._draw = function () {
         this._fillLine(this.init.y + i);
     }
     for (var i = 0; i < this.items.length; i++) this._drawRow(i);
-    
+
     // reset foreground and background colors
     this.charm.background(this.colors.bg);
     this.charm.foreground(this.colors.fg);
-    
+
     for (var i = 0; i < this.padding.bottom; i++) {
         this._fillLine(this.y + i);
     }
@@ -161,7 +161,7 @@ Menu.prototype._drawRow = function (index) {
     index = (index + this.items.length) % this.items.length;
     var item = this.items[index];
     this.charm.position(item.x, item.y);
-    
+
     if (this.selected === index) {
         this.charm.background(this.colors.fg);
         this.charm.foreground(this.colors.bg);
@@ -170,10 +170,12 @@ Menu.prototype._drawRow = function (index) {
         this.charm.background(this.colors.bg);
         this.charm.foreground(this.colors.fg);
     }
-    
+
+    var wc = (item.label.match(/[^\u0000-\u00ff]/g) || '').length;
+
     this.charm.write(
         item.label
-        + Array(Math.max(0, this.width - item.label.length)).join(' ')
+        + Array(Math.max(0, this.width - item.label.length - wc)).join(' ')
     );
 };
 

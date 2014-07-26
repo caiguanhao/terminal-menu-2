@@ -1,3 +1,24 @@
+# terminal-menu-2
+
+A better terminal menu to lazily support wide Unicode characters like Chinese
+characters.
+
+```
+npm i terminal-menu-2 --save
+```
+
+Example:
+
+```js
+function slice(str, len) {
+  return str.slice(0, len - (str.match(/[^\u0000-\u00ff]/g) || '').length);
+}
+
+for (var i = 0; i < items.length; i++) {
+  menu.add(slice(items[i].title, 80));
+}
+```
+
 # terminal-menu
 
 retro ansi terminal menus for serious 80s technicolor business
