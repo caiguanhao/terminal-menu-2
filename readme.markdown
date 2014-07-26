@@ -1,7 +1,7 @@
 # terminal-menu-2
 
-A better terminal menu to lazily support wide Unicode characters like Chinese
-characters.
+Fix the problem of displaying Chinese-like characters in the original
+terminal-menu package.
 
 ```
 npm i terminal-menu-2 --save
@@ -18,6 +18,8 @@ for (var i = 0; i < items.length; i++) {
   menu.add(slice(items[i].title, 80));
 }
 ```
+
+![screen shot](https://cloud.githubusercontent.com/assets/1284703/3711584/70819d92-14de-11e4-861c-4769992dbf0e.png)
 
 # terminal-menu
 
